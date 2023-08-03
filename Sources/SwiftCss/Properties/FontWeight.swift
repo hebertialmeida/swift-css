@@ -15,16 +15,15 @@ public enum FontWeightValue: String {
     /// Defines lighter characters
     case lighter
     /// Defines from thin to thick characters. 400 is the same as normal, and 700 is the same as bold
-    // @TODO: better numeric value support
-    case w100
-    case w200
-    case w300
-    case w400
-    case w500
-    case w600
-    case w700
-    case w800
-    case w900
+    case w100 = "100"
+    case w200 = "200"
+    case w300 = "300"
+    case w400 = "400"
+    case w500 = "500"
+    case w600 = "600"
+    case w700 = "700"
+    case w800 = "800"
+    case w900 = "900"
     /// Sets this property to its default value.
     case initial
     /// Inherits this property from its parent element.
