@@ -25,16 +25,16 @@ public struct StylesheetRenderer {
             case let charset as Charset:
                 return #"@charset ""# + charset.name + #"";"#
             case let value as FontFace:
-                let properties = value.properties.map { renderProperty($0) }.joined(separator: newline)
+                let properties = value.properties.compactMap { renderProperty($0, level: 1) }.joined(separator: newline)
                 return "@font-face {" + newline + properties + newline + "}"
             case let value as Import:
                 return "@import " + value.name + ";"
             case let keyframes as Keyframes:
-                let selectors = keyframes.selectors.map { renderSelector($0) }.joined(separator: newline)
+                let selectors = keyframes.selectors.compactMap { renderSelector($0) }.joined(separator: newline)
                 return "@keyframes " + keyframes.name + singleSpace + "{" + newline + selectors + newline + "}" + newline
             case let media as Media:
                 let level = media.query != nil ? 1 : 0
-                var selectors = media.selectors.map { renderSelector($0, level: level) }.joined(separator: newline)
+                var selectors = media.selectors.compactMap { renderSelector($0, level: level) }.joined(separator: newline)
                 if let query = media.query {
                     selectors = "@media " + query + singleSpace + "{" + newline + selectors + newline + "}"
                 }
@@ -52,7 +52,9 @@ public struct StylesheetRenderer {
         return spaces + property.name + ":" + singleSpace + property.value + (property.isImportant ? " !important" : "")
     }
     
-    private func renderSelector(_ selector: Selector, level: Int = 0) -> String {
+    private func renderSelector(_ selector: Selector, level: Int = 0) -> String? {
+        guard !selector.properties.isEmpty else { return nil }
+
         let spaces = String(repeating: " ", count: level * indent)
         var suffix = ""
         if let pseudo = selector.pseudo {
