@@ -49,7 +49,7 @@ public struct StylesheetRenderer {
     
     private func renderProperty(_ property: Property, level: Int = 0) -> String {
         let spaces = String(repeating: " ", count: level * indent)
-        return spaces + property.name + ":" + singleSpace + property.value + (property.isImportant ? " !important" : "")
+        return spaces + property.name + ":" + singleSpace + property.value + (property.isImportant ? " !important" : "") + ";"
     }
     
     private func renderSelector(_ selector: Selector, level: Int = 0) -> String? {
@@ -60,7 +60,7 @@ public struct StylesheetRenderer {
         if let pseudo = selector.pseudo {
             suffix = pseudo
         }
-        let properties = selector.properties.map { renderProperty($0, level: level + 1) }.joined(separator: ";" + newline) + (!minify ? ";" : "")
+        let properties = selector.properties.map { renderProperty($0, level: level + 1) }.joined(separator: newline)
         return spaces + selector.name + suffix + singleSpace + "{" + newline + properties + newline + spaces + "}"
     }
 }
